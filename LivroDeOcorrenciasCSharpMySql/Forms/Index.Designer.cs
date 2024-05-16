@@ -106,6 +106,7 @@
             loginButton.TabIndex = 5;
             loginButton.Text = "Entrar";
             loginButton.UseVisualStyleBackColor = true;
+            loginButton.Click += loginButton_Click;
             // 
             // addUserButton
             // 
@@ -116,6 +117,7 @@
             addUserButton.TabIndex = 6;
             addUserButton.Text = "Novo Usuário";
             addUserButton.UseVisualStyleBackColor = true;
+            addUserButton.Click += addUserButton_Click;
             // 
             // Index
             // 
