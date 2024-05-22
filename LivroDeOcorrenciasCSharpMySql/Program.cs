@@ -1,3 +1,5 @@
+using LivroDeOcorrenciasCSharpMySql.Forms;
+
 namespace LivroDeOcorrenciasCSharpMySql
 {
     internal static class Program

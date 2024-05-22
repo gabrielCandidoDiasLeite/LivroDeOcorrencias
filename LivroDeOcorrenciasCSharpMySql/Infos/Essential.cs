@@ -10,9 +10,8 @@ namespace LivroDeOcorrenciasCSharpMySql.Infos
 {
     public class Essential
     {
+        public string userLevel = "Administrador";
         ConnectionInfo connectionInfo = new ConnectionInfo();
-
-        //public string savedUserFirstName, savedUserPosition;
         public void SaveLoginInfoToUse(string userFirstName, string userPosition)
         {
             MySqlConnection connection = new MySqlConnection(connectionInfo.MySqlConnectionString());
@@ -45,7 +44,7 @@ namespace LivroDeOcorrenciasCSharpMySql.Infos
         {
             MySqlConnection connection = new MySqlConnection(connectionInfo.MySqlConnectionString());
 
-            string query = $"DELETE FROM essential"; //WHERE firstName = {_userFirstName}";
+            string query = $"DELETE FROM essential";
 
             try
             {

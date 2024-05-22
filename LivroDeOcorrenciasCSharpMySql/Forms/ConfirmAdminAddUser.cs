@@ -1,35 +1,40 @@
+ï»¿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 using LivroDeOcorrenciasCSharpMySql.Connections;
 using LivroDeOcorrenciasCSharpMySql.Infos;
-using LivroDeOcorrenciasCSharpMySql.Forms;
 using MySql.Data.MySqlClient;
-using System.Data;
-using System.DirectoryServices.ActiveDirectory;
 
-namespace LivroDeOcorrenciasCSharpMySql
+namespace LivroDeOcorrenciasCSharpMySql.Forms
 {
-    public partial class Index : Form
+    public partial class ConfirmAdminAddUser : Form
     {
         ConnectionInfo connectionInfo = new ConnectionInfo();
+        AddUser addUser = new AddUser();
         Essential essential = new Essential();
-        Menu menu = new Menu();
-        ConfirmAdminAddUser ConfirmAdminAddUser = new ConfirmAdminAddUser();
-        public Index()
+        public ConfirmAdminAddUser()
         {
             InitializeComponent();
 
-            menu.FormClosed += Form_FormClosed;
+            addUser.FormClosed += Form_FormClosed;
+        }
+        private void okButton_Click(object sender, EventArgs e)
+        {
+            CheckAdmInfo();
         }
 
-        private void loginButton_Click(object sender, EventArgs e)
+        private void cancelButton_Click(object sender, EventArgs e)
         {
-            LoginButton();
-        }
-        private void addUserButton_Click(object sender, EventArgs e)
-        {
-            AddUserButton();
+            Close();
         }
 
-        void LoginButton()
+        void CheckAdmInfo()
         {
             using (MySqlConnection connection = new MySqlConnection(connectionInfo.MySqlConnectionString()))
             {
@@ -45,32 +50,23 @@ namespace LivroDeOcorrenciasCSharpMySql
                         return;
                     }
 
-                    string query = $"SELECT firstName, position FROM users WHERE email = @Email AND password = @Password;";
+                    string query = $"SELECT * FROM users WHERE email = '{email}' AND password = '{password}' AND userLevel = '{essential.userLevel}'";
 
                     MySqlCommand command = new MySqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@Email", email);
-                    command.Parameters.AddWithValue("@Password", password);
 
                     MySqlDataReader reader = command.ExecuteReader();
 
                     if (reader.HasRows)
                     {
-                        while (reader.Read())
-                        {
-                            string userFirstName = reader["firstName"].ToString();
-                            string userPosition = reader["position"].ToString();
-
-                            essential.SaveLoginInfoToUse(userFirstName, userPosition);
-                        }
-
                         Hide();
+                        addUser.ShowDialog();
                         CleanTextBoxes();
-                        menu.WelcomeLabel();
-                        menu.ShowDialog();
+                        return;
                     }
                     else
                     {
-                        MessageBox.Show("Usuário e senha não encontrados! Tente novamente!");
+                        MessageBox.Show("VocÃª nÃ£o possui autorizaÃ§Ã£o como administrador!");
+                        CleanTextBoxes();
                         return;
                     }
                 }
@@ -84,12 +80,7 @@ namespace LivroDeOcorrenciasCSharpMySql
                     MessageBox.Show($"Error: {ex.Message}");
                     return;
                 }
-            }
-        }
-        
-        void AddUserButton()
-        {
-            ConfirmAdminAddUser.ShowDialog();
+            }   
         }
 
         void CleanTextBoxes()
@@ -100,18 +91,19 @@ namespace LivroDeOcorrenciasCSharpMySql
 
         private bool ValidateUserInput(string email, string password)
         {
-            if(string.IsNullOrEmpty(email) && string.IsNullOrEmpty(password)){
-                MessageBox.Show("Você tem que preencher todos os campos para acessar o sistema.");
+            if (string.IsNullOrEmpty(email) && string.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("VocÃª tem que preencher todos os campos para acessar o sistema.");
                 return false;
             }
-            else if(!string.IsNullOrEmpty(email) && string.IsNullOrEmpty(password))
+            else if (!string.IsNullOrEmpty(email) && string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Você tem que preencher a senha para acessar o sistema.");
+                MessageBox.Show("VocÃª tem que preencher a senha para acessar o sistema.");
                 return false;
             }
-            else if(string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
+            else if (string.IsNullOrEmpty(email) && !string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Você tem que preencher o e-mail para acessar o sistema.");
+                MessageBox.Show("VocÃª tem que preencher o e-mail para acessar o sistema.");
                 return false;
             }
             return true;
@@ -119,7 +111,7 @@ namespace LivroDeOcorrenciasCSharpMySql
 
         void Form_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Show();
+            Close();
         }
     }
 }
