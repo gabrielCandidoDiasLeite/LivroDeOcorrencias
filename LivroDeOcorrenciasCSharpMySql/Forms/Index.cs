@@ -1,17 +1,25 @@
 using LivroDeOcorrenciasCSharpMySql.Connections;
+using LivroDeOcorrenciasCSharpMySql.Infos;
 using LivroDeOcorrenciasCSharpMySql.Forms;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.DirectoryServices.ActiveDirectory;
 
 namespace LivroDeOcorrenciasCSharpMySql
 {
     public partial class Index : Form
     {
         ConnectionInfo connectionInfo = new ConnectionInfo();
+        Essential essential = new Essential();
         Menu menu = new Menu();
+
+        public string userPosition = "";
+        public string userFirstName = "";
         public Index()
         {
             InitializeComponent();
+
+            menu.FormClosed += Form_FormClosed;
         }
 
         private void loginButton_Click(object sender, EventArgs e)
@@ -34,29 +42,39 @@ namespace LivroDeOcorrenciasCSharpMySql
                 string email = emailTextBox.Text;
                 string password = passwordTextBox.Text;
 
-                if (email == "" || password == "")
+                if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
                 {
                     MessageBox.Show("Você tem que preencher todos os campos para acessar o sistema.");
                     return;
                 }
 
-                string query = $"SELECT firstName, position FROM users WHERE email = '{email}' AND password = '{password}';";
+                string query = $"SELECT firstName, position FROM users WHERE email = @Email AND password = @Password;";
 
-                MySqlDataAdapter adapter = new MySqlDataAdapter(query, connection);
-                DataTable dataTable = new DataTable();
-                adapter.Fill(dataTable);
+                MySqlCommand command = new MySqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Email", email);
+                command.Parameters.AddWithValue("@Password", password);
 
-                if (dataTable.Rows.Count == 0)
+                MySqlDataReader reader = command.ExecuteReader();
+
+                if(reader.HasRows)
                 {
-                    MessageBox.Show("Usuário e senha não encontrados! Tente novamente!");
-                    return;
+                    while(reader.Read())
+                    {
+                        userFirstName = reader["firstName"].ToString();
+                        userPosition = reader["position"].ToString();
+
+                        essential.SaveLoginInfoToUse(userFirstName, userPosition);
+                    }
+
+                    this.Hide();
+                    emailTextBox.Text = "";
+                    passwordTextBox.Text = "";
+                    menu.WelcomeLabel();
+                    menu.ShowDialog();
                 }
                 else
                 {
-                    this.Hide();
-                    email = "";
-                    password = "";
-                    menu.ShowDialog();
+                    MessageBox.Show("Usuário e senha não encontrados! Tente novamente!");
                     return;
                 }
             }
@@ -64,6 +82,10 @@ namespace LivroDeOcorrenciasCSharpMySql
             {
                 MessageBox.Show($"Error: {ex.Message}");
             }
+        }
+        void Form_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            this.Show();
         }
     }
 }
