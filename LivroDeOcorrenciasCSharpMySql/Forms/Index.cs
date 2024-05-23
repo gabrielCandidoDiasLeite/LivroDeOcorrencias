@@ -45,7 +45,7 @@ namespace LivroDeOcorrenciasCSharpMySql
                         return;
                     }
 
-                    string query = $"SELECT firstName, position FROM users WHERE email = @Email AND password = @Password;";
+                    string query = $"SELECT firstName, position, userLevel FROM users WHERE email = @Email AND password = @Password;";
 
                     MySqlCommand command = new MySqlCommand(query, connection);
                     command.Parameters.AddWithValue("@Email", email);
@@ -59,8 +59,9 @@ namespace LivroDeOcorrenciasCSharpMySql
                         {
                             string userFirstName = reader["firstName"].ToString();
                             string userPosition = reader["position"].ToString();
+                            string userLevel = reader["userLevel"].ToString() ;
 
-                            essential.SaveLoginInfoToUse(userFirstName, userPosition);
+                            essential.SaveLoginInfoToUse(userFirstName, userPosition, userLevel);
                         }
 
                         Hide();
@@ -119,6 +120,7 @@ namespace LivroDeOcorrenciasCSharpMySql
 
         void Form_FormClosed(object sender, FormClosedEventArgs e)
         {
+            essential.DeleteInfo();
             Show();
         }
     }

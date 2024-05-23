@@ -50,7 +50,7 @@ namespace LivroDeOcorrenciasCSharpMySql.Forms
                         return;
                     }
 
-                    string query = $"SELECT * FROM users WHERE email = '{email}' AND password = '{password}' AND userLevel = '{essential.userLevel}'";
+                    string query = $"SELECT * FROM users WHERE email = '{email}' AND password = '{password}' AND userLevel = '{essential.userLevelAdm}'";
 
                     MySqlCommand command = new MySqlCommand(query, connection);
 

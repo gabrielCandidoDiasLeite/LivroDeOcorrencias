@@ -30,6 +30,7 @@
         {
             label1 = new Label();
             button1 = new Button();
+            onButton = new Button();
             SuspendLayout();
             // 
             // label1
@@ -45,7 +46,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(12, 33);
+            button1.Location = new Point(118, 33);
             button1.Name = "button1";
             button1.Size = new Size(100, 35);
             button1.TabIndex = 1;
@@ -53,11 +54,22 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
+            // onButton
+            // 
+            onButton.Location = new Point(12, 33);
+            onButton.Name = "onButton";
+            onButton.Size = new Size(100, 35);
+            onButton.TabIndex = 2;
+            onButton.Text = "Livro";
+            onButton.UseVisualStyleBackColor = true;
+            onButton.Click += onButton_Click;
+            // 
             // Menu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(784, 761);
+            Controls.Add(onButton);
             Controls.Add(button1);
             Controls.Add(label1);
             Name = "Menu";
@@ -71,5 +83,6 @@
 
         private Label label1;
         private Button button1;
+        private Button onButton;
     }
 }

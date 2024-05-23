@@ -16,9 +16,18 @@ namespace LivroDeOcorrenciasCSharpMySql.Forms
     public partial class Menu : Form
     {
         Essential essential = new Essential();
+        DailyContent dailyContent = new DailyContent();
         public Menu()
         {
             InitializeComponent();
+
+            dailyContent.FormClosed += Form_FormClosed;
+        }
+        private void onButton_Click(object sender, EventArgs e)
+        {
+            dailyContent.HeaderText();
+            Hide();
+            dailyContent.ShowDialog();
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -31,5 +40,11 @@ namespace LivroDeOcorrenciasCSharpMySql.Forms
         {
             label1.Text = $"Bem vindo {essential.LoadInfoToUse()}";
         }
+
+        void Form_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Show();
+        }
+
     }
 }

@@ -10,34 +10,41 @@ namespace LivroDeOcorrenciasCSharpMySql.Infos
 {
     public class Essential
     {
-        public string userLevel = "Administrador";
+        public string userLevelAdm = "Administrador";
         ConnectionInfo connectionInfo = new ConnectionInfo();
-        public void SaveLoginInfoToUse(string userFirstName, string userPosition)
+        public void SaveLoginInfoToUse(string userFirstName, string userPosition, string userLevel)
         {
-            MySqlConnection connection = new MySqlConnection(connectionInfo.MySqlConnectionString());
-
-            string query = $"INSERT INTO essential (firstName, position) VALUES ('{userFirstName}', '{userPosition}')";
-
-            try
+            using (MySqlConnection connection = new MySqlConnection(connectionInfo.MySqlConnectionString()))
             {
-                connection.Open();
-
-                if (string.IsNullOrEmpty(userFirstName) || string.IsNullOrEmpty(userPosition))
+                try
                 {
+                    connection.Open();
+
+                    string query = $"INSERT INTO essential (firstName, position, userLevel) VALUES (@FirstName, @Position, @UserLevel)";
+                    if (string.IsNullOrEmpty(userFirstName) || string.IsNullOrEmpty(userPosition) || string.IsNullOrEmpty(userLevel))
+                    {
+                        return;
+                    }
+                    else
+                    {
+                        MySqlCommand command = new MySqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@FirstName", userFirstName);
+                        command.Parameters.AddWithValue("@Position", userPosition);
+                        command.Parameters.AddWithValue("@UserLevel", userLevel);
+
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch(MySqlException sqlEx)
+                {
+                    MessageBox.Show($"DataBase Error: {sqlEx.Message})");
                     return;
                 }
-                else
+                catch (Exception ex)
                 {
-                    MySqlCommand command = new MySqlCommand(query, connection);
-                    command.CommandTimeout = 60;
-
-                    MySqlDataReader reader = command.ExecuteReader();
+                    MessageBox.Show($"Error: {ex.Message})");
+                    return;
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error: {ex.Message})");
-                return;
             }
         }
         public void DeleteInfo()
@@ -92,6 +99,34 @@ namespace LivroDeOcorrenciasCSharpMySql.Infos
                 MessageBox.Show($"Error: {ex.Message}");
             }
             return $"{position} {firstName}";
+        }
+
+        public string GetDateToUse()
+        {
+            string dateNow = DateTime.Now.ToString("dd/MM/yyyy");
+            return $"{dateNow}";
+        }
+
+        public string GetShiftToUse()
+        {
+            DateTime now = DateTime.Now;
+
+            TimeSpan startDayTime = new TimeSpan(6, 0, 0);
+            TimeSpan endDayTime = new TimeSpan(18, 0, 0);
+
+            TimeSpan currentTime = now.TimeOfDay;
+
+            string shift = string.Empty;
+
+            if(currentTime >= startDayTime && currentTime < endDayTime)
+            {
+                shift = "diurno";
+            }
+            else
+            {
+                shift = "noturno";
+            }
+            return $"{shift}";
         }
     }
 }
