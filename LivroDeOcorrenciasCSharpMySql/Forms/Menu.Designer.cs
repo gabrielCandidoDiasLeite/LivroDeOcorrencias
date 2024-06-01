@@ -31,6 +31,7 @@
             label1 = new Label();
             button1 = new Button();
             onButton = new Button();
+            contentButton = new Button();
             SuspendLayout();
             // 
             // label1
@@ -46,7 +47,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(118, 33);
+            button1.Location = new Point(12, 115);
             button1.Name = "button1";
             button1.Size = new Size(100, 35);
             button1.TabIndex = 1;
@@ -64,11 +65,22 @@
             onButton.UseVisualStyleBackColor = true;
             onButton.Click += onButton_Click;
             // 
+            // contentButton
+            // 
+            contentButton.Location = new Point(12, 74);
+            contentButton.Name = "contentButton";
+            contentButton.Size = new Size(100, 35);
+            contentButton.TabIndex = 3;
+            contentButton.Text = "Conteúdo";
+            contentButton.UseVisualStyleBackColor = true;
+            contentButton.Click += contentButton_Click;
+            // 
             // Menu
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(784, 761);
+            Controls.Add(contentButton);
             Controls.Add(onButton);
             Controls.Add(button1);
             Controls.Add(label1);
@@ -84,5 +96,6 @@
         private Label label1;
         private Button button1;
         private Button onButton;
+        private Button contentButton;
     }
 }

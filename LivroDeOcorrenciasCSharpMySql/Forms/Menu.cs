@@ -17,11 +17,13 @@ namespace LivroDeOcorrenciasCSharpMySql.Forms
     {
         Essential essential = new Essential();
         DailyContent dailyContent = new DailyContent();
+        SearchContent searchContent = new SearchContent();
         public Menu()
         {
             InitializeComponent();
 
             dailyContent.FormClosed += Form_FormClosed;
+            searchContent.FormClosed += Form_FormClosed;
         }
         private void onButton_Click(object sender, EventArgs e)
         {
@@ -29,7 +31,11 @@ namespace LivroDeOcorrenciasCSharpMySql.Forms
             Hide();
             dailyContent.ShowDialog();
         }
-
+        private void contentButton_Click(object sender, EventArgs e)
+        {
+            Hide();
+            searchContent.ShowDialog();
+        }
         private void button1_Click(object sender, EventArgs e)
         {
             essential.DeleteInfo();
@@ -43,6 +49,7 @@ namespace LivroDeOcorrenciasCSharpMySql.Forms
 
         void Form_FormClosed(object sender, FormClosedEventArgs e)
         {
+            searchContent.ClearDataTable();
             Show();
         }
 

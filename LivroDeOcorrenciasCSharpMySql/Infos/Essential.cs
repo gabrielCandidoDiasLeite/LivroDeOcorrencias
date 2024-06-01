@@ -11,6 +11,7 @@ namespace LivroDeOcorrenciasCSharpMySql.Infos
     public class Essential
     {
         public string userLevelAdm = "Administrador";
+        public string[] allShifts = ["diurno", "noturno"];
         ConnectionInfo connectionInfo = new ConnectionInfo();
         public void SaveLoginInfoToUse(string userFirstName, string userPosition, string userLevel)
         {
@@ -120,11 +121,11 @@ namespace LivroDeOcorrenciasCSharpMySql.Infos
 
             if(currentTime >= startDayTime && currentTime < endDayTime)
             {
-                shift = "diurno";
+                shift = allShifts[0];
             }
             else
             {
-                shift = "noturno";
+                shift = allShifts[1];
             }
             return $"{shift}";
         }
