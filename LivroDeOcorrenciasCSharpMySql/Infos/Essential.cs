@@ -101,7 +101,6 @@ namespace LivroDeOcorrenciasCSharpMySql.Infos
             }
             return $"{position} {firstName}";
         }
-
         public string GetDateToUse()
         {
             string dateNow = DateTime.Now.ToString("dd/MM/yyyy");
@@ -119,15 +118,7 @@ namespace LivroDeOcorrenciasCSharpMySql.Infos
 
             string shift = string.Empty;
 
-            if(currentTime >= startDayTime && currentTime < endDayTime)
-            {
-                shift = allShifts[0];
-            }
-            else
-            {
-                shift = allShifts[1];
-            }
-            return $"{shift}";
+            return $"{(currentTime >= startDayTime && currentTime < endDayTime ? allShifts[0] : allShifts[1])}";
         }
     }
 }

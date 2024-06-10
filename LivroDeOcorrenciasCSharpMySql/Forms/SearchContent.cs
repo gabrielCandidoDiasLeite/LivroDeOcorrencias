@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -16,10 +17,13 @@ namespace LivroDeOcorrenciasCSharpMySql.Forms
     public partial class SearchContent : Form
     {
         ConnectionInfo connectionInfo = new ConnectionInfo();
+        ShowContent showContent = new ShowContent();
         Essential essential = new Essential();
         public SearchContent()
         {
             InitializeComponent();
+
+            dataGridView1.CellDoubleClick += dataGridView1_CellDoubleClick;
         }
 
         private void getDateButton_Click(object sender, EventArgs e)
@@ -338,6 +342,39 @@ namespace LivroDeOcorrenciasCSharpMySql.Forms
                 }
             }
         }
+        void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            using(MySqlConnection connection = new MySqlConnection(connectionInfo.MySqlConnectionString()))
+            {
+                try
+                {
+                    connection.Open();
 
+                    if (e.RowIndex != -1)
+                    {
+                        DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+                        string date = row.Cells["Date"].Value.ToString();
+                        string position = row.Cells["Position"].Value.ToString();
+                        string firstName = row.Cells["FirstName"].Value.ToString();
+                        string shift = row.Cells["shift"].Value.ToString();
+
+                        string query =
+                            $"SELECT * FROM daily WHERE position = '{position}' AND firstName = '{firstName}' AND date = '{date}' AND shift = '{shift}'";
+
+                        showContent.QueryToGetContent(query);
+                        showContent.Content();
+                        showContent.ShowDialog();
+                    }
+                }
+                catch (MySqlException sqlEx)
+                {
+                    MessageBox.Show($"DataBase Error:{sqlEx.Message}");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error: {ex.Message}");
+                }
+            }
+        }
     }
 }

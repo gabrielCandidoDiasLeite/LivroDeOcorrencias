@@ -173,6 +173,14 @@ namespace LivroDeOcorrenciasCSharpMySql.Forms
                 string defaultImage = Path.GetFullPath(
                 @"D:\Gabriel Leite\Green Eye Dev\Livro de Ocorrências\livrodeocorrencias\LivroDeOcorrencias\LivroDeOcorrenciasCSharpMySql\Imgs\GreenEye.png");
 
+                for(int i = 0; i < pathToSave.Length; i++)
+                {
+                    if (string.IsNullOrEmpty(pathToSave[i]))
+                    {
+                        pathToSave[i] = defaultImage;
+                    }
+                }
+
                 if (!Directory.Exists(destinationFolderPath))
                 {
                     Directory.CreateDirectory(destinationFolderPath);
@@ -261,12 +269,7 @@ namespace LivroDeOcorrenciasCSharpMySql.Forms
         {
             DialogResult result = MessageBox.Show("Deseja finalizar?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-            if(result == DialogResult.Yes)
-            {
-                return true;
-            }
-           
-            return false;
+            return result == DialogResult.Yes;
         }
     }
 }

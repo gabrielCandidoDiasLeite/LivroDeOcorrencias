@@ -68,7 +68,7 @@
             // 
             // pictureBox1
             // 
-            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.ImageLocation = "D:\\Gabriel Leite\\Green Eye Dev\\Livro de Ocorrências\\livrodeocorrencias\\LivroDeOcorrencias\\LivroDeOcorrenciasCSharpMySql\\Imgs\\GreenEye.png";
             pictureBox1.InitialImage = (Image)resources.GetObject("pictureBox1.InitialImage");
             pictureBox1.Location = new Point(556, 59);
             pictureBox1.Name = "pictureBox1";
